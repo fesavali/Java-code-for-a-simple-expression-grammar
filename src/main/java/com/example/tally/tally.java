@@ -107,6 +107,9 @@ public class tally {
     private static int expr() {
         s.indentPrint(1, "expr", print);
         int subtotal = term();
+        if(token == (int) '+' || token == (int) '-'){
+            add_op();
+        }
         while (token == (int) '+' || token == (int) '-') {
             int saveOp = token;
             token = lex.getToken();
@@ -128,6 +131,9 @@ public class tally {
     private static int term() {
         s.indentPrint(1, "term", print);
         int subtotal = factor();
+        if(token == (int) '*' || token == (int) '/'){
+            mult_op();
+        }
         while (token == (int) '*' || token == (int) '/') {
             int saveOp = token;
             token = lex.getToken();
@@ -243,12 +249,12 @@ public class tally {
     // ************************************************
     private static int add_op() {
         s.indentPrint(1, "add_op", print);
-        int subtotal = 0;
+        int subtotal = term();
         while (token == (int) '+' || token == (int) '-') {
             int saveOp = token;
             token = lex.getToken();
-            if ((int) saveOp == '+') subtotal += term();
-            else if ((int) saveOp == '-') subtotal = subtotal - term();
+            if ((int) saveOp == '+') subtotal += expr();
+            else if ((int) saveOp == '-') subtotal = subtotal - expr();
             else {
                 System.out.println("error: " + (char) saveOp + "  expected '+'  or '-' ");
             }
